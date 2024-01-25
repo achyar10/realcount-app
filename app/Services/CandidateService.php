@@ -21,7 +21,7 @@ class CandidateService
 
     public function findAll()
     {
-        return Candidate::orderBy('name', 'asc')->get();
+        return Candidate::orderBy('sort_number', 'asc')->get();
     }
 
     public function getById($id)
