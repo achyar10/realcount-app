@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\LandingController;
+use App\Http\Controllers\TpsController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -58,6 +59,17 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
         Route::put('/district/{id}/edit', 'update');
         Route::delete('/district', 'destroy')->name('district');
         Route::get('/district/{id}/detail', 'show')->name('detail');
+    });
+    
+    // TPS
+    Route::controller(TpsController::class)->group(function () {
+        Route::get('/tps', 'index')->name('tps');
+        Route::get('/tps/create', 'create')->name('tpsCreate');
+        Route::post('/tps', 'store')->name('tps');
+        Route::get('/tps/{id}/edit', 'edit');
+        Route::put('/tps/{id}/edit', 'update');
+        Route::delete('/tps', 'destroy')->name('tps');
+        Route::get('/tps/{id}/detail', 'show')->name('detail');
     });
 
 });

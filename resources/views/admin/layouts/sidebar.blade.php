@@ -19,7 +19,12 @@
         
             <ul class="metismenu list-unstyled" id="side-menu">
                 <li class="menu-title" key="t-managements">Master Data</li>
-
+                <li>
+                    <a href="{{ route('tps') }}" class="waves-effect">
+                        <i class="bx bx-home"></i>
+                        <span key="t-home">Kelola TPS</span>
+                    </a>
+                </li>
                 <li>
                     <a href="{{ route('district') }}" class="waves-effect">
                         <i class="bx bx-map"></i>
