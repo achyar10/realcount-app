@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\LandingController;
@@ -70,6 +71,17 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
         Route::put('/tps/{id}/edit', 'update');
         Route::delete('/tps', 'destroy')->name('tps');
         Route::get('/tps/{id}/detail', 'show')->name('detail');
+    });
+
+    // Candidate
+    Route::controller(CandidateController::class)->group(function () {
+        Route::get('/candidate', 'index')->name('candidate');
+        Route::get('/candidate/create', 'create')->name('candidateCreate');
+        Route::post('/candidate', 'store')->name('candidate');
+        Route::get('/candidate/{id}/edit', 'edit');
+        Route::put('/candidate/{id}/edit', 'update');
+        Route::delete('/candidate', 'destroy')->name('candidate');
+        Route::get('/candidate/{id}/detail', 'show')->name('detail');
     });
 
 });

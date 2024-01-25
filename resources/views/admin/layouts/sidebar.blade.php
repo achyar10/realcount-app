@@ -20,6 +20,12 @@
             <ul class="metismenu list-unstyled" id="side-menu">
                 <li class="menu-title" key="t-managements">Master Data</li>
                 <li>
+                    <a href="{{ route('candidate') }}" class="waves-effect">
+                        <i class="bx bx-user-pin"></i>
+                        <span key="t-upin">Kandidat</span>
+                    </a>
+                </li>
+                <li>
                     <a href="{{ route('tps') }}" class="waves-effect">
                         <i class="bx bx-home"></i>
                         <span key="t-home">Kelola TPS</span>
