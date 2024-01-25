@@ -20,7 +20,7 @@ class TpsService
 
     public function findAll()
     {
-        return Tps::with('district')->orderBy('name', 'asc')->get();
+        return Tps::with('district')->orderBy('number_of_tps', 'asc')->get();
     }
 
     public function getById($id)

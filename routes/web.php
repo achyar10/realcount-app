@@ -7,6 +7,7 @@ use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\TpsController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VoteController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -82,6 +83,12 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
         Route::put('/candidate/{id}/edit', 'update');
         Route::delete('/candidate', 'destroy')->name('candidate');
         Route::get('/candidate/{id}/detail', 'show')->name('detail');
+    });
+
+    // Vote
+    Route::controller(VoteController::class)->group(function () {
+        Route::get('/vote', 'index')->name('vote');
+        Route::post('/vote', 'store')->name('vote');
     });
 
 });

@@ -16,6 +16,15 @@
                 </li>
 
             </ul>
+            <ul class="metismenu list-unstyled" id="side-menu">
+                <li class="menu-title" key="t-managements">Perhitungan Suara</li>
+                <li>
+                    <a href="{{ route('vote') }}" class="waves-effect">
+                        <i class="bx bx-user-voice"></i>
+                        <span key="t-uvoice">Penginputan Suara</span>
+                    </a>
+                </li>
+            </ul>
         
             <ul class="metismenu list-unstyled" id="side-menu">
                 <li class="menu-title" key="t-managements">Master Data</li>
