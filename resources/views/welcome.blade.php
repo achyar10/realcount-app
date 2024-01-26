@@ -70,24 +70,24 @@
                                 <td class="middle">{{ $candidate['name'] }}</td>
                                 <td>
                                     <div class="percentext">{{ $candidate['percent'] }}%</div>
-                                    <div class="text-right">{{ $candidate['total_vote'] }} suara</div>
+                                    <div class="text-right">{{ number_format($candidate['total_vote'], 0, ',', '.') }} suara</div>
                                 </td>
                             </tr>
                         @endforeach
                         <tr>
-                            <td colspan="3" class="text-center middle text-danger font-weight-bold"
+                            <td colspan="3" class="text-center middle text-success font-weight-bold"
                                 style="font-size: 25px;">Total Suara Sah</td>
                             <td>
-                                <div class="percentext">100%</div>
-                                <div class="text-right">{{ $totalVote }} suara</div>
+                                <div class="percentext text-success">100%</div>
+                                <div class="text-right">{{ number_format($totalVote, 0, ',', '.') }} suara</div>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="3" class="text-center middle text-warning font-weight-bold"
+                            <td colspan="3" class="text-center middle text-danger font-weight-bold"
                                 style="font-size: 25px;">Suara Tidak Sah</td>
                             <td>
-                                <div class="percentext text-warning">{{ $invalidPercent }}%</div>
-                                <div class="text-right">{{ $invalidVote }} suara</div>
+                                <div class="percentext text-danger">{{ $invalidPercent }}%</div>
+                                <div class="text-right">{{ number_format($invalidVote, 0, ',', '.') }} suara</div>
                             </td>
                         </tr>
 
@@ -98,20 +98,20 @@
         <hr>
 
         <h5>Rekapitulasi Per TPS</h5>
-        {{-- <form action="" method="get">
+        <form action="" method="get">
             <div class="form-group">
                 <label for="">Wilayah Pemilihan</label>
-                <select name="districtId" id="" class="form-control" onchange="this.form.submit()">
+                <select name="district_id" id="" class="form-control" onchange="this.form.submit()">
                     <option value="">Semua Wilayah Pemilihan</option>
-                    {{#each districts}}
-                        <option value="{{id}}" {{#ifCond id ../districtId}} selected {{/ifCond}}>{{name}}</option>
-                    {{/each}}
+                    @foreach ($districts as $district)
+                        <option value="{{$district->id}}" {{ old('district_id', request()->district_id) == $district->id ? 'selected' : null }}>{{$district->name}}</option>
+                    @endforeach
                 </select>
             </div>
-        </form> --}}
-        {{-- <div class="table-responsive">
+        </form>
+        <div class="table-responsive">
             <table class="table table-sm table-bordered table-hover">
-                <thead class="bg-success text-white text-center">
+                <thead class="text-white text-center" style="background-color: #F08419">
                     <tr>
                         <th class="align-middle" rowspan="2">No</th>
                         <th class="align-middle" rowspan="2">TPS</th>
@@ -120,61 +120,52 @@
                         <th class="align-middle" rowspan="2">Total Suara</th>
                         <th class="align-middle" rowspan="2">No Urut</th>
                         <th class="align-middle" rowspan="2">Nama Calon</th>
-                        {{#if settings.app_gender}}
-                            <th colspan="2">Jumlah Suara</th>
-                        {{/if}}
                         <th class="align-middle" rowspan="2">Total Hasil</th>
                         <th class="align-middle" rowspan="2">Persentase</th>
                     </tr>
-                    {{#if settings.app_gender}}
-                        <tr>
-                            <th>Laki-laki</th>
-                            <th>Perempuan</th>
-                        </tr>
-                    {{/if}}
                 </thead>
                 <tbody>
-                    {{#each api}}
+                    @foreach ($api as $detail)
                         <tr>
-                            <td rowspan="{{ math (Length candidates) "+" 1 }}" class="align-middle">{{inc @index}}</td>
-                            <td rowspan="{{ math (Length candidates) "+" 1 }}" class="align-middle">
-                                {{no_tps}} <br>
-                                {{#ifNotEq plano null}}
-                                    <a href="{{plano}}" target="_blank" class="btn btn-sm btn-info">Plano</a>
-                                {{/ifNotEq}}
+                            <td rowspan="{{ count($detail['candidates']) + 1 }}" class="align-middle">
+                                {{ $loop->iteration }}</td>
+                            <td rowspan="{{ count($detail['candidates']) + 1 }}" class="align-middle">
+                                {{ $detail['no_tps'] }} <br>
+                                    @if (!empty($detail['plano']))
+                                        <a href="{{ asset('plano/'.$detail['plano'])}}" target="_blank" class="btn btn-sm btn-danger">Plano</a>
+                                    @endif
                             </td>
-                            <td rowspan="{{ math (Length candidates) "+" 1 }}" class="text-center align-middle">{{numberFormat total_dpt}}</td>
-                            <td rowspan="{{ math (Length candidates) "+" 1 }}" class="text-center align-middle">{{numberFormat absen}}</td>
-                            <td rowspan="{{ math (Length candidates) "+" 1 }}" class="text-center align-middle">{{numberFormat total_suara}}</td>
-                            {{#each candidates}}
-                                {{#ifNotEq no_urut 99}}
-                                    <td>No {{no_urut}}</td>
-                                    <td>{{name}}</td>
-                                    {{#if ../../settings.app_gender}}
-                                    <td class="text-center font-weight-bold">{{numberFormat total_male}}</td>
-                                    <td class="text-center font-weight-bold">{{numberFormat total_female}}</td>
-                                    {{/if}}
-                                    <td class="text-center font-weight-bold">{{numberFormat total_suara}}</td>
-                                    <td class="text-center font-weight-bold">{{percent}}%</td>
-                                    </tr>
-                                {{else}}
+                            <td rowspan="{{ count($detail['candidates']) + 1 }}" class="text-center align-middle">
+                                {{ $detail['total_dpt'] }}</td>
+                            <td rowspan="{{ count($detail['candidates']) + 1 }}" class="text-center align-middle">
+                                {{ $detail['absen'] }}</td>
+                            <td rowspan="{{ count($detail['candidates']) + 1 }}" class="text-center align-middle">
+                                {{ $detail['total_suara'] }}</td>
+                            @foreach ($detail['candidates'] as $can)
+                                @if ($can['sort_number'] != 99)
+                                    <td>No {{ $can['sort_number'] }}</td>
+                                    <td>{{ $can['name'] }}</td>
+                                    <td class="text-center font-weight-bold">{{ number_format($can['total_vote'], 0, ',', '.') }}</td>
+                                    <td class="text-center font-weight-bold">{{ $can['percent'] }}%</td>
+                                </tr>
+                                @else
                                     <td colspan="2" class="text-center text-success">Total Suara Sah</td>
-                                    <td {{#if ../../settings.app_gender}} colspan="3" {{/if}} class="text-center font-weight-bold text-success">{{numberFormat grand_total}}</td>
-                                    <td class="text-center font-weight-bold text-success">{{grand_total_percent}}%</td>
+                                    <td class="text-center font-weight-bold text-success">{{ number_format($can['grand_total_vote'], 0, ',', '.') }}</td>
+                                    <td class="text-center font-weight-bold text-success">{{ $can['grand_total_percent'] }}%</td>
                                     </tr>
-                                    <td colspan="2" class="text-center text-danger">Total {{name}}</td>
-                                    <td {{#if ../../settings.app_gender}} colspan="3" {{/if}} class="text-center font-weight-bold text-danger">
-                                        {{numberFormat total_suara}}</td>
-                                    <td class="text-center font-weight-bold text-danger">{{percent}}%</td>
+                                    <td colspan="2" class="text-center text-danger">Total {{ $can['name'] }}</td>
+                                    <td class="text-center font-weight-bold text-danger">
+                                        {{ number_format($can['total_vote'], 0, ',', '.') }}</td>
+                                    <td class="text-center font-weight-bold text-danger">{{ $can['percent'] }}%</td>
                                     </tr>
-                                {{/ifNotEq}}
-                            {{/each}}
+                                @endif
+                            @endforeach
                             </tr>
                         </tr>
-                    {{/each}}
+                    @endforeach
                 </tbody>
             </table>
-        </div> --}}
+        </div>
 
     </div>
     <footer class="mt-3">
@@ -201,8 +192,8 @@
         let dataPie = []
         <?php foreach ($pie as $key) : ?>
         dataPie.push({
-            name: '<?php echo $key['name'] ?>',
-            y: <?php echo $key['y'] ?>
+            name: '<?php echo $key['name']; ?>',
+            y: <?php echo $key['y']; ?>
         })
         <?php endforeach ?>
         Highcharts.chart('container', {
